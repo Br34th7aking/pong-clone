@@ -7,12 +7,15 @@
 import pygame 
 import settings, colors 
 from player import Player
+from ball import Ball
+import random
 
 # Variables 
 SIZE = (800, 600)
 FPS = 30
 
 game_over = False 
+
 
 
 if __name__ == '__main__': 
@@ -23,6 +26,8 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     
     player = Player()
+    ball = Ball(player.stick.x + player.stick.width // 2, player.stick.y - 5)
+    
     # main game loop
     while not game_over: 
         # do event handling 
@@ -30,6 +35,12 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 game_over = True 
        
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE and not ball.is_moving:
+                    ball.is_moving = True 
+                    ball.direction_x = random.choice([-1, 1]) # start moving either left or right 
+                    ball.direction_y = -1 # start moving up 
+
 
         screen.fill(colors.BLACK)
         # draw 
@@ -42,8 +53,10 @@ if __name__ == '__main__':
             player.stick.direction = -1
             player.stick.move()
         player.stick.draw(screen, colors.BLUE)
-        # draw the ball 
+        # draw the ball
+        ball.update(player)
 
+        ball.draw(screen, colors.RED)
         pygame.display.flip()
         clock.tick(settings.FPS) 
 
