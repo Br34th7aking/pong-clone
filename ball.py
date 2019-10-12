@@ -26,9 +26,10 @@ class Ball(GameObject):
         pygame.draw.circle(screen, color, [self.center_x, self.center_y], self.radius)
     
     def update(self, player):
-        # draw the self
-        self.center_x += self.speed * self.direction_x 
-        self.center_y += self.speed * self.direction_y
+        # draw the ball 
+        if self.is_moving: 
+            self.center_x += self.speed * self.direction_x 
+            self.center_y += self.speed * self.direction_y
 
         if self.center_x < 0 or self.center_x > settings.SIZE[0] - self.radius:
             self.direction_x = -self.direction_x 
