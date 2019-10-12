@@ -17,34 +17,60 @@ FPS = 30
 game_over = False 
 pygame.font.init()
 font = pygame.font.Font('font/PixelEmulator.ttf', 20)
-titl_font = pygame.font.Font('font/PixelEmulator.ttf', 50)
+title_font = pygame.font.Font('font/PixelEmulator.ttf', 50)
 
-def reset(ball, player, screen):
-    ball.is_moving = False 
-    ball.center_x = player.stick.x + player.stick.width // 2
-    ball.center_y = player.stick.y - 5
-    player.lives -= 1
+def display_start_screen(screen):
     paused = True 
     
     while paused: 
-
+        
+        title = title_font.render('PONG Reborn', True, colors.WHITE)
         message = font.render('Press Space to start', True, colors.WHITE)
-        screen.blit(message, [200, 300])
+        screen.blit(title, [200, 200])
+        screen.blit(message, [250, 400])
         pygame.display.flip()
-        if player.lives < 1:
-        # current game is over. 
-        # restart the game
-            game_over_msg = font.render('GAME OVER!!!', True, colors.WHITE)
-            screen.blit(game_over_msg, [200, 250])
-            restart_msg = font.render('Press Space to restart the game', True, colors.WHITE)
-            screen.blit(restart_msg, [100, 300])
-            player.lives = 3
-            player.score = 0
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN: 
                 if event.key == pygame.K_SPACE: 
                     paused = False 
                     screen.fill(colors.BLACK)
+
+def reset(ball, player, screen):
+    ball.is_moving = False 
+    ball.center_x = player.stick.x + player.stick.width // 2
+    ball.center_y = player.stick.y - 5
+    ball.speed = 5
+
+    player.lives -= 1
+    paused = True 
+        
+    while paused: 
+
+        if player.lives < 1:
+        # current game is over. 
+        # restart the game
+            screen.fill(colors.BLACK)
+            game_over_msg = font.render('GAME OVER!!!', True, colors.WHITE)
+            screen.blit(game_over_msg, [250, 250])
+            final_score = font.render(f'Final Score: {player.score}', True, colors.WHITE)
+            screen.blit(final_score, [250, 300])
+            player.lives = 3
+            player.score = 0
+        else:
+            message = font.render('Press Space to start', True, colors.WHITE)
+            screen.blit(message, [250, 400])
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_SPACE: 
+                    paused = False 
+                    screen.fill(colors.BLACK)
+
+        pygame.display.flip()
+
+def update_score(player, ball):
+    player.score += 1 + int(ball.speed * 0.3)
+
 
 if __name__ == '__main__': 
     pygame.init()
@@ -56,6 +82,7 @@ if __name__ == '__main__':
     player = Player()
     ball = Ball(player.stick.x + player.stick.width // 2, player.stick.y - 5)
     
+    display_start_screen(screen)
     # main game loop
     while not game_over: 
         if player.lives <= 0:
@@ -89,7 +116,7 @@ if __name__ == '__main__':
         player.stick.draw(screen, colors.BLUE)
         # draw the ball
         ball.update(player)
-        
+        update_score(player, ball)
         if ball.center_y > player.stick.y + player.stick.width: 
             reset(ball, player, screen)
 

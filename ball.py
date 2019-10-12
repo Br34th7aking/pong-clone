@@ -13,7 +13,7 @@ class Ball(GameObject):
         self.center_x = x
         self.center_y = y
         self.radius = radius 
-        self.speed = 4 
+        self.speed = 5 
         self.direction_x = 0 
         self.direction_y = 0 
         self.is_moving = False 
@@ -39,6 +39,8 @@ class Ball(GameObject):
             self.direction_y = -self.direction_y
             if player.stick.direction == -self.direction_x: 
                 self.direction_x = -self.direction_x
+        
+        self.speed = 4 + player.score // 10000
 
     def check_collision(self, stick):
         if self.center_x > stick.x and self.center_x < stick.x + stick.width \
