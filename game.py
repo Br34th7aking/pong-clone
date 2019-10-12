@@ -24,8 +24,8 @@ def display_start_screen(screen):
     
     while paused: 
         
-        title = title_font.render('PONG Reborn', True, colors.WHITE)
-        message = font.render('Press Space to start', True, colors.WHITE)
+        title = title_font.render('PONG Reborn', True, colors.GOLD)
+        message = font.render('Press Space to start', True, colors.GREEN)
         screen.blit(title, [200, 200])
         screen.blit(message, [250, 400])
         pygame.display.flip()
@@ -50,9 +50,9 @@ def reset(ball, player, screen):
         # current game is over. 
         # restart the game
             screen.fill(colors.BLACK)
-            game_over_msg = font.render('GAME OVER!!!', True, colors.WHITE)
+            game_over_msg = font.render('GAME OVER!!!', True, colors.RED)
             screen.blit(game_over_msg, [250, 250])
-            final_score = font.render(f'Final Score: {player.score}', True, colors.WHITE)
+            final_score = font.render(f'Final Score: {player.score}', True, colors.GOLD)
             screen.blit(final_score, [250, 300])
             player.lives = 3
             player.score = 0
@@ -100,8 +100,8 @@ if __name__ == '__main__':
 
 
         screen.fill(colors.BLACK)
-        score = font.render(f'Score: {player.score}', True, colors.WHITE)
-        lives = font.render(f'Lives: {player.lives}', True, colors.WHITE)
+        score = font.render(f'Score: {player.score}', True, colors.GREEN)
+        lives = font.render(f'Lives: {player.lives}', True, colors.DEEPSKYBLUE)
         screen.blit(score, [50, 50])
         screen.blit(lives, [600, 50])
         # draw 
@@ -113,14 +113,14 @@ if __name__ == '__main__':
         elif keystate[pygame.K_LEFT]: 
             player.stick.direction = -1
             player.stick.move()
-        player.stick.draw(screen, colors.BLUE)
+        player.stick.draw(screen, colors.DEEPSKYBLUE)
         # draw the ball
         ball.update(player)
         update_score(player, ball)
         if ball.center_y > player.stick.y + player.stick.width: 
             reset(ball, player, screen)
 
-        ball.draw(screen, colors.RED)
+        ball.draw(screen, colors.PINK)
         pygame.display.flip()
         clock.tick(settings.FPS) 
     
